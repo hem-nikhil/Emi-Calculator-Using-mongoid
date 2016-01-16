@@ -1,0 +1,29 @@
+<a href="/">Back to calculator</a>
+<div align='center'><h1>USER INFORMATION !!!!</h1>
+
+<% @user_info.each do |user_id, data|%>
+  <% emi_enquiries = data[:emi_enquiries] %>
+  <table class="frTBClass bottomMargin" border="1" cellpadding="0" cellspacing="0" >
+    <tr style="font-weight: bold; background-color: #9f9f9f; text-align: center;">
+      
+      <td style="width: 125px;">Email</td>
+      <td colspan="4" style="color: #ffffff">EMI Enquiries</td>
+    </tr>
+    <tr>
+      <td rowspan="<%= emi_enquiries.size + 1%>" style="text-align: center;"><%=data[:email] %></td>
+      <td style="width: 125px; font-weight: bold;background-color: #f0f0f0; text-align: center;" >Principal Amount</td>
+      <td style="width: 125px; font-weight: bold;background-color: #f0f0f0; text-align: center;" >Rate Of Interest</td>
+      <td style="width: 125px; font-weight: bold;background-color: #f0f0f0; text-align: center;" >Number of Months </td>
+      <td style="width: 175px; font-weight: bold;background-color: #f0f0f0; text-align: center;" >EMI</td>
+    </tr>
+    <% emi_enquiries.each do |emi_enquiry| %>
+        <tr class="textmiddleAlign leftPadding"  style="text-align: center;vertical-align: middle;">
+          <td> <%= emi_enquiry.principal_amount  %></td>
+          <td><%= emi_enquiry.rate_of_intrest%></td>
+          <td><%= emi_enquiry.number_of_months%></td>
+          <td><%= emi_enquiry.emi%></td>
+        </tr>
+    <% end %>
+  </table>
+  <% end %>
+  </div>

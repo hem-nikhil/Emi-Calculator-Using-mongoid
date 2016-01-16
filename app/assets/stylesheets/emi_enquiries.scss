@@ -1,0 +1,39 @@
+// Place all the styles related to the EmiEnquiries controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.required{
+	color: red;
+}
+.total-emi{
+	line-height:0px;
+    height:300px;
+    width:700px;
+    float:left;
+    padding:5px;
+}
+.emi-enquiry-form
+{
+	border-style: double;
+    border-width: 5px;
+	margin-left: 30%;
+	margin-top: 5%;
+	margin-right: 35%;
+	padding: 3%;
+}
+.total-emi-till-some-month{
+	line-height:0px;
+	height:300px;
+	width:450px;
+    float:left;
+    padding:10px;
+}
+.monthy-summary{
+	float:none;
+}
+.field{
+	
+}
+#error_explanation
+{
+	width:90%!important;
+}

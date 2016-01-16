@@ -1,0 +1,106 @@
+<a href="/">Back to calculator</a>
+<div align='center'><h1> EMI SUMMARY </h1></div>
+
+<div class="total-emi">
+	<br><table  border="1" cellpadding="0" cellspacing="0" >
+		<tr class="textmiddleAlign leftPadding"  style="text-align: center;vertical-align: middle;">
+			 <td style="width: 300px;" height="80">Principal Amount :: <div id="principal_amount"><%= '%.2f' % @emi_summary[:principal_amount]%></div></td>
+			 <td style="width: 300px;">Monthly EMI :: <div id="emi"><%= '%.2f' % @emi_summary[:emi] %></div></td>
+		</tr>
+		<tr class="textmiddleAlign leftPadding"  style="text-align: center;vertical-align: middle;">
+			 <td style="width: 300px;" height="80">Rate Of Interest :: <div id="rate_of_intrest"><%= '%.2f' % @emi_summary[:rate_of_intrest]%></div></td>
+			 <td style="width: 300px;">Total Interest Payable :: <div id="total_intrest_paid"><%= '%.2f' % @emi_summary[:total_intrest_paid]%></div></td>
+		</tr>
+		<tr class="textmiddleAlign leftPadding"  style="text-align: center;vertical-align: middle;">
+			 <td style="width: 300px;" height="80">Number of Months :: <div id="number_of_months"><%=  @emi_summary[:number_of_months].to_i%></div></td>
+			 <td style="width: 300px;">Total Payment  :: <div id="total_payable_amount"><%= '%.2f' % @emi_summary[:total_payable_amount]%></div></td>
+		</tr>
+	</table>
+</div>
+<div class="total-emi-till-some-month">
+	<table class="frTBClass bottomMargin" border="1" >
+	<tr>
+		<td style="width: 400px;padding: 10px;height:100px;"  >
+			<div>Calculate Total Interest and Principal Paid Till Given Month</div><br>
+			<form action="JavaScript:checkEmiForGivenMonth()" id="check_month_emi">
+				Enter Months ::<input type="text" name="Month" id="monthToCalculate" required>
+    			<input type="submit" value="Check">
+    		</form>
+		</td>
+	
+	</tr>
+	<tr>
+		<td><div hidden="true" id="hidden_attr1">Total Principal Paid :: </div><div id='total_principal_till_month'></td>
+	</tr>
+	<tr>
+		<td><div hidden="true" id="hidden_attr2">Total Interest Paid :: </div><div id='total_interest_till_month'></td>
+	</tr>
+    </table>
+    <div class="temp-print" id="temp"></div>
+</div>
+
+<br><br>
+<div class="monthy-summary">
+<table class="frTBClass bottomMargin" border="1" cellpadding="0" cellspacing="0" >
+	  <tr style="font-weight: bold; background-color: #9f9f9f; text-align: center;">
+	    <td style="width: 125px;">Month No</td>
+	    <td style="width: 125px;">Month</td>
+        <td style="width: 125px;">Principal<br>(A)</td>
+        <td style="width: 125px;">Intrest<br>(B)</td>
+        <td style="width: 125px;">EMI<br>(A+B)</td>
+        <td style="width: 125px;">Balance</td>
+	  </tr>
+	<% @emi_summary[:months].each do |month,emi_data|%>
+	    <tr class="textmiddleAlign leftPadding"  style="text-align: center;vertical-align: middle;">
+		    <td style="width: 125px;"><%= month %></td>
+		    <td style="width: 125px;"><%= emi_data[:month_name] %></td>
+	        <td style="width: 125px;"><%= '%.2f' %emi_data[:principal_amount_per_month]%></td>
+	        <td style="width: 125px;"><%= '%.2f' %emi_data[:intrest_per_month]%></td>
+	        <td style="width: 125px;"><%= '%.2f' % @emi_summary[:emi]%></td>
+	        <td style="width: 125px;"><%= '%.2f' % (@emi_summary[:principal_amount]- emi_data[:total_principal])%></td>
+	    </tr>
+	<% end %>
+</table>
+
+<script>
+	function checkEmiForGivenMonth(){
+
+		var emi = document.getElementById("emi").innerHTML;
+		var principal_amount = document.getElementById("principal_amount").innerHTML;
+		var rate_of_intrest = document.getElementById("rate_of_intrest").innerHTML;
+		var number_of_months = parseInt(document.getElementById("number_of_months").innerHTML);
+		var current_month = parseInt(document.getElementById("monthToCalculate").value);
+		if(isNaN(current_month)|| isNaN(number_of_months)||(current_month <= 0 ) || (current_month > number_of_months)){
+			 var errors = document.getElementById("total_principal_till_month");
+			 errors.innerHTML = "Number of months must be in specified range of 1 to "+number_of_months;
+			 errors.style.color = "Red";
+			 document.getElementById("hidden_attr1").hidden = true;
+			 document.getElementById("hidden_attr2").hidden = true;
+			 document.getElementById("total_interest_till_month").innerHTML = "";
+			return ;
+		}
+		$.ajax({
+			type:'GET', 
+           	url: '/month-interest-summary', 
+           	data: $.param({ emi: emi,principal_amount: principal_amount, rate_of_intrest: rate_of_intrest, number_of_months: current_month }),
+		    success: function(response){
+		      if(response.success){
+		        document.getElementById("total_principal_till_month").innerHTML = response.total_principal;
+				document.getElementById("total_principal_till_month").style.color = "black";
+		        document.getElementById("hidden_attr1").hidden = false;
+		        document.getElementById("total_interest_till_month").innerHTML = response.total_interest;
+		        document.getElementById("hidden_attr2").hidden = false;
+		      }else{
+		       	alert("error from month-interest- summary");
+		      }
+		    },
+		    error:function(response){
+		      alert("error");
+		    }
+	    });
+		
+    	
+    	
+    }
+</script>
+  

@@ -1,0 +1,68 @@
+<%= form_for(@emi_enquiry) do |f| %>
+   
+   <%if @errors.present? %>
+    <div id="error_explanation" width='70%'>
+      ERRORS
+     <ul>
+    <%@errors.each do |field,error|%>
+       <%error.each do |err|%>
+       <li><%= "#{field.capitalize} -- #{err}" %></li>
+       <%end%>
+    <%end%>
+    </ul>
+    </div>
+   <%end%>
+  <div class="fields">
+    <table>
+      <tr>
+        <td collspan=3>
+    <%= f.label :email do %>
+      <span class="required">*</span>Email :
+    <% end %>
+  </td>
+  <td>
+    <%= f.text_field :email ,required: true, autofocus: true %>
+  </td>
+  </tr>
+  <tr>
+    <td collspan=3>
+    <%= f.label :principal_amount do %>
+      <span class="required">*</span>Principal Amount :
+    <% end %>
+  </td>
+  <td>
+    <%= f.text_field :principal_amount ,required: true%>
+  </td>
+ </tr>
+  <tr>
+    <td collspan=3>
+    <%= f.label :rate_of_intrest   do %>
+      <span class="required">*</span>Rate of Interest :
+    <% end %>
+  </td>
+  <td>
+    <%= f.text_field :rate_of_intrest ,required: true%>
+  </td>
+ </tr>
+  <tr>
+    <td collspan=3>
+    <%= f.label :number_of_months  do %>
+      <span class="required">*</span>Number of Months :
+    <% end %>
+  </td>
+  <td>
+    <%= f.text_field :number_of_months,required: true %>
+  </td>
+    </tr>
+  </div>
+  </table>
+   <br>
+  <div class="actions">
+    <%= f.submit "Calculate EMI" %>
+  </div>
+
+
+<% end %>
+<form action="/">
+        <input type="submit" value="Reset">
+</form>
